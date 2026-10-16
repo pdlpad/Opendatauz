@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "OchiqStat: data/territories.csv (одна строка как объект)",
+  "title": "Opendatauz: data/territories.csv (одна строка как объект)",
   "description": "Справочник СОАТО. Код — klass_id из дампов СИАТ: 1700 — республика, 4 знака — регион, 7 знаков — район или город. Неизвестный код не выбрасывается, а получает status = unknown.",
   "type": "object",
   "required": [

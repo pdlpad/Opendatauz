@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "OchiqStat: data/catalog.json",
+  "title": "Opendatauz: data/catalog.json",
   "description": "Дерево разделов СИАТ и сжатая карточка каждого показателя. Лишних полей нет: персональные данные сюда не попадают.",
   "type": "object",
   "required": ["source", "generated_at", "tree", "indicators"],

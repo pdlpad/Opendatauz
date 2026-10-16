@@ -2,7 +2,7 @@ export function App() {
   return (
     <div className="shell">
       <main className="content">
-        <h1>OchiqStat</h1>
+        <h1>Opendatauz</h1>
         <p>
           Открытое зеркало статистики Национального комитета по статистике Республики Узбекистан
           с привязкой к СОАТО.

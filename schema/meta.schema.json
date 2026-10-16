@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "OchiqStat: indicators/<раздел>/<code>.json",
+  "title": "Opendatauz: indicators/<раздел>/<code>.json",
   "description": "Метаданные одного показателя из /metadata/ и указателя дампа. Поля fullname, phone, email и user здесь не описаны и запрещены (additionalProperties: false).",
   "type": "object",
   "required": [
