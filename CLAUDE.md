@@ -1,4 +1,4 @@
-# OchiqStat — правила для работы в репозитории
+# Opendatauz — правила для работы в репозитории
 
 Полное задание — в `SPEC.md`. Работать по этапам из раздела 7. После этапа 1 остановиться и показать отчёт инвентаризации.
 
@@ -16,7 +16,7 @@
 ## API
 - Каталог: `GET /api/sdmx/?lang=ru`.
 - Дамп: `GET /api/sdmx/{id}/table/download/?download_format=json`, затем URL из поля `file_2`.
-- Не больше 2 запросов в секунду, ретраи с backoff, `User-Agent: OchiqStat-sync (+https://github.com/pdlpad/OchiqStat)`.
+- Не больше 2 запросов в секунду, ретраи с backoff, `User-Agent: Opendatauz-sync (+https://github.com/pdlpad/Opendatauz)`.
 
 ## Экран
 - У каждой цифры видны единица, период, дата обновления СИАТ и ссылка на источник.
@@ -24,6 +24,6 @@
 
 ## Код
 - Python 3.12 в `tools/`.
-- React + Vite + TypeScript в `site/`, маршрутизация через hash, base `/OchiqStat/`.
+- React + Vite + TypeScript в `site/`, маршрутизация через hash, base `/Opendatauz/`.
 - Визуальный язык — как в `pdlpad/SOATO`, файл `tools/map_template.html`, ветка `claude/tender-einstein-1kly0y`.
 - Коммиты по шагам. CI должен быть зелёным до мержа.
