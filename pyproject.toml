@@ -1,0 +1,3 @@
+# Инструменты в tools/ (Python 3.12) ставятся не как пакет: здесь только настройки pytest.
+[tool.pytest.ini_options]
+testpaths = ["tests"]

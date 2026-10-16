@@ -1,0 +1,15 @@
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+
+# Кэш сырых ответов СИАТ (появится на этапе 1): в git не попадает
+.cache/
+
+# Сайт: зависимости, результат сборки и данные, которые собираются при сборке
+site/node_modules/
+site/dist/
+site/public/data/
+
+# Система
+.DS_Store

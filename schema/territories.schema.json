@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Opendatauz: data/territories.csv (одна строка как объект)",
+  "description": "Справочник СОАТО. Код — klass_id из дампов СИАТ: 1700 — республика, 4 знака — регион, 7 знаков — район или город. Неизвестный код не выбрасывается, а получает status = unknown.",
+  "type": "object",
+  "required": [
+    "soato", "level", "parent_soato", "siat_id", "name_uz", "name_ru", "name_en", "name_uzc",
+    "map_code", "status", "first_period", "last_period"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "soato": { "type": "string", "pattern": "^17(\\d{2}|\\d{5})$" },
+    "level": { "enum": ["country", "region", "district"] },
+    "parent_soato": { "type": ["string", "null"], "pattern": "^17(\\d{2}|\\d{5})$" },
+    "siat_id": {
+      "description": "Вспомогательный id СИАТ. Ключом территории служит soato.",
+      "type": ["integer", "null"]
+    },
+    "name_uz": { "type": ["string", "null"] },
+    "name_ru": { "type": ["string", "null"] },
+    "name_en": { "type": ["string", "null"] },
+    "name_uzc": { "type": ["string", "null"] },
+    "map_code": { "description": "Например uz-qr.", "type": ["string", "null"] },
+    "status": {
+      "description": "active — есть в текущем ряду; historic — ряд обрывается раньше текущего года; unknown — код найден в дампе, но не в основном справочнике.",
+      "enum": ["active", "historic", "unknown"]
+    },
+    "first_period": {
+      "type": ["string", "null"],
+      "pattern": "^\\d{4}(-Q[1-4]|-M(0[1-9]|1[0-2]))?$"
+    },
+    "last_period": {
+      "type": ["string", "null"],
+      "pattern": "^\\d{4}(-Q[1-4]|-M(0[1-9]|1[0-2]))?$"
+    }
+  },
+  "allOf": [
+    {
+      "if": { "required": ["level"], "properties": { "level": { "const": "country" } } },
+      "then": { "properties": { "soato": { "const": "1700" }, "parent_soato": { "type": "null" } } }
+    },
+    {
+      "if": { "required": ["level"], "properties": { "level": { "const": "region" } } },
+      "then": { "properties": { "soato": { "pattern": "^17\\d{2}$" }, "parent_soato": { "const": "1700" } } }
+    },
+    {
+      "if": { "required": ["level"], "properties": { "level": { "const": "district" } } },
+      "then": { "properties": { "soato": { "pattern": "^17\\d{5}$" }, "parent_soato": { "pattern": "^17\\d{2}$" } } }
+    }
+  ]
+}
