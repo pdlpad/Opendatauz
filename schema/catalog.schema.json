@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OchiqStat: data/catalog.json",
+  "description": "Дерево разделов СИАТ и сжатая карточка каждого показателя. Лишних полей нет: персональные данные сюда не попадают.",
+  "type": "object",
+  "required": ["source", "generated_at", "tree", "indicators"],
+  "additionalProperties": false,
+  "properties": {
+    "source": { "const": "https://siat.stat.uz/api/sdmx/?lang=ru" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "tree": { "type": "array", "items": { "$ref": "#/$defs/node" } },
+    "indicators": { "type": "array", "items": { "$ref": "#/$defs/indicator" } }
+  },
+  "$defs": {
+    "names": {
+      "description": "Названия на 4 языках из /table/ и /metadata/, не из дампа. null — языка нет в источнике.",
+      "type": "object",
+      "required": ["uz", "ru", "en", "uzc"],
+      "additionalProperties": false,
+      "properties": {
+        "uz": { "type": ["string", "null"] },
+        "ru": { "type": ["string", "null"] },
+        "en": { "type": ["string", "null"] },
+        "uzc": { "type": ["string", "null"] }
+      }
+    },
+    "period": {
+      "description": "Период как в источнике: 2025, 2026-Q2, 2026-M08. Другой формат — ошибка, не догадка.",
+      "type": "string",
+      "pattern": "^\\d{4}(-Q[1-4]|-M(0[1-9]|1[0-2]))?$"
+    },
+    "period_range": {
+      "description": "[первый, последний] период ряда; null, если значений нет.",
+      "type": ["array", "null"],
+      "minItems": 2,
+      "maxItems": 2,
+      "items": { "$ref": "#/$defs/period" }
+    },
+    "datetime_local": {
+      "description": "Дата как в СИАТ: время Ташкента (UTC+5), без часового пояса, например 2026-10-15T20:37.",
+      "type": ["string", "null"],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2})?$"
+    },
+    "node": {
+      "description": "Узел дерева: раздел или показатель. У показателя indicator_code задан, children пуст.",
+      "type": "object",
+      "required": ["id", "names", "indicator_code", "children"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "integer" },
+        "names": { "$ref": "#/$defs/names" },
+        "indicator_code": { "type": ["string", "null"] },
+        "children": { "type": "array", "items": { "$ref": "#/$defs/node" } }
+      }
+    },
+    "indicator": {
+      "description": "Один показатель. code уникален в каталоге (3 237 из 3 237 на 16.10.2026).",
+      "type": "object",
+      "required": [
+        "id", "code", "names", "section_path", "department", "period_type", "period_range",
+        "dimension", "levels", "status", "updated_xlsx", "is_active", "removed_at"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "integer" },
+        "code": { "type": "string", "pattern": "^[0-9][0-9.]*$" },
+        "names": { "$ref": "#/$defs/names" },
+        "section_path": { "type": "array", "items": { "type": "string" } },
+        "department": { "type": ["string", "null"] },
+        "period_type": {
+          "description": "Yillik→annual, Choraklik→quarterly, Oylik→monthly, Yangilanmaydigan→not_updated. null — в источнике пусто.",
+          "enum": ["annual", "quarterly", "monthly", "not_updated", null]
+        },
+        "period_range": { "$ref": "#/$defs/period_range" },
+        "dimension": { "enum": ["territory", "okved", "tnved", "country", "other"] },
+        "levels": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["country", "region", "district"] }
+        },
+        "status": {
+          "description": "Yangilangan→updated, Muddati o'tib yangilangan→updated_late, Kutulmoqda→pending, Muddati o'tgan→overdue, Yangilanmaydigan→not_updated. null — в источнике пусто.",
+          "enum": ["updated", "updated_late", "pending", "overdue", "not_updated", null]
+        },
+        "updated_xlsx": { "$ref": "#/$defs/datetime_local" },
+        "is_active": { "type": "boolean" },
+        "removed_at": {
+          "description": "Проставляется, если показатель пропал из каталога. Строка не удаляется.",
+          "type": ["string", "null"],
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}
